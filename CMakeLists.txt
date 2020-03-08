@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
 # set the project name
-project(glfw_test)
+project(glfw_basics)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -17,7 +17,8 @@ target_include_directories(glad PUBLIC ${GLAD_INCLUDES})
 
 set(SOURCE_FILES
     src/main.cc
-    src/ProgramObject.cc)
+    src/ProgramObject.cc
+    src/Window.cc)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} glad glfw3 glfw3dll opengl32)

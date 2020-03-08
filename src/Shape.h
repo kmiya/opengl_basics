@@ -8,8 +8,8 @@
 class Shape {
  public:
   Shape(GLint size, GLsizei vertexCount, const Object::Vertex *vertex)
-  : object(new Object(size, vertexCount, vertex))
-  , vertexCount(vertexCount) {
+    : object(new Object(size, vertexCount, vertex))
+    , vertexCount(vertexCount) {
   }
 
   void draw() const {

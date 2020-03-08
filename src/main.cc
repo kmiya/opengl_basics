@@ -2,10 +2,16 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <memory>
 
+constexpr Object::Vertex rectangleVertex[] = {
+  {-0.5, -0.5f},
+  {0.5, -0.5f},
+  {0.5, 0.5f},
+  {-0.5, 0.5f}
+};
 
 int main() {
-  GLFWwindow* window;
   if (!glfwInit()) {
     std::exit(EXIT_FAILURE);
   }
@@ -21,30 +27,41 @@ int main() {
   glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-  window = glfwCreateWindow(640, 480, "My Window", nullptr, nullptr);
+  Window window;
+
+  /*window = glfwCreateWindow(640, 480, "My Window", nullptr, nullptr);
   if (!window) {
     std::exit(EXIT_FAILURE);
-  }
+  }*/
 
-  glfwMakeContextCurrent(window);
-  gladLoadGL();
-  glfwSwapInterval(1);
+  //glfwMakeContextCurrent(window);
+  //gladLoadGL();
+  //glfwSwapInterval(1);
 
   glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 
   const GLuint program = loadProgramObject("point.vert", "point.frag");
 
+  // get location of uniform variables
+  const GLint aspectLoc = glGetUniformLocation(program, "aspect");
+
+  // create figure data
+  std::unique_ptr<const Shape> shape(new Shape(2, 4, rectangleVertex));
+
   // main loop
-  while (!glfwWindowShouldClose(window)) {
+  while (window) {
     glClear(GL_COLOR_BUFFER_BIT);
 
+    // enable shader program
     glUseProgram(program);
 
-    glfwSwapBuffers(window);
-    glfwWaitEvents();
-  }
+    // set values to uniform variables
+    glUniform1f(aspectLoc, window.getAspect());
 
-  glfwDestroyWindow(window);
+    shape->draw();
+
+    window.swapBuffers();
+  }
 
   exit(EXIT_SUCCESS);
 }
