@@ -15,10 +15,6 @@ int main() {
   if (!glfwInit()) {
     std::exit(EXIT_FAILURE);
   }
-  // std::cout << "OpenGL:" << std::endl;
-  // std::cout << glGetString(GL_VENDOR) << std::endl;
-  // std::cout << glGetString(GL_RENDERER) << std::endl;
-  // std::cout << glGetString(GL_VERSION) << std::endl;
 
   atexit(glfwTerminate);
   
@@ -28,15 +24,6 @@ int main() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
   Window window;
-
-  /*window = glfwCreateWindow(640, 480, "My Window", nullptr, nullptr);
-  if (!window) {
-    std::exit(EXIT_FAILURE);
-  }*/
-
-  //glfwMakeContextCurrent(window);
-  //gladLoadGL();
-  //glfwSwapInterval(1);
 
   glClearColor(1.0f, 1.0f, 1.0f, 0.0f);
 
