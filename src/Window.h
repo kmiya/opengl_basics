@@ -9,7 +9,8 @@ class Window {
  public:
   Window(const int width = 640, const int height = 480,
          const char* title = "Main Window")
-      : window(glfwCreateWindow(width, height, title, nullptr, nullptr)){
+      : window(glfwCreateWindow(width, height, title, nullptr, nullptr))
+      , scale(100.0f) {
     if (!window) {
       std::cerr << "Cannot create GLFW window." << std::endl;
       std::exit(EXIT_FAILURE);
@@ -47,16 +48,19 @@ class Window {
         static_cast<Window*>(glfwGetWindowUserPointer(window));
 
     if (instance) {
-      instance->aspect =
-          static_cast<GLfloat>(width) / static_cast<GLfloat>(height);
+      instance->size[0] = static_cast<GLfloat>(width);
+      instance->size[1] = static_cast<GLfloat>(height);
     }
   }
 
-  inline GLfloat getAspect() const { return aspect; }
+  inline const GLfloat* getSize() const { return size; }
+
+  inline GLfloat getScale() const { return scale; }
 
  private:
   GLFWwindow* window;
-  GLfloat aspect;
+  GLfloat size[2];
+  GLfloat scale;
 };
 
 #endif // WINDOW_H

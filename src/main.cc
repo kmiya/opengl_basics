@@ -30,7 +30,8 @@ int main() {
   const GLuint program = loadProgramObject("point.vert", "point.frag");
 
   // get location of uniform variables
-  const GLint aspectLoc = glGetUniformLocation(program, "aspect");
+  const GLint sizeLoc = glGetUniformLocation(program, "size");
+  const GLint scaleLoc = glGetUniformLocation(program, "scale");
 
   // create figure data
   std::unique_ptr<const Shape> shape(new Shape(2, 4, rectangleVertex));
@@ -43,7 +44,8 @@ int main() {
     glUseProgram(program);
 
     // set values to uniform variables
-    glUniform1f(aspectLoc, window.getAspect());
+    glUniform2fv(sizeLoc, 1, window.getSize());
+    glUniform1f(scaleLoc, window.getScale());
 
     shape->draw();
 
