@@ -9,8 +9,8 @@ class Window {
  public:
   Window(const int width = 640, const int height = 480,
          const char* title = "Main Window")
-      : window(glfwCreateWindow(width, height, title, nullptr, nullptr))
-      , scale(100.0f) {
+      : window(glfwCreateWindow(width, height, title, nullptr, nullptr)),
+        scale(100.0f), location{ 0.0f, 0.0f } {
     if (!window) {
       std::cerr << "Cannot create GLFW window." << std::endl;
       std::exit(EXIT_FAILURE);
@@ -22,7 +22,9 @@ class Window {
 
     glfwSetWindowUserPointer(window, this);
 
-    glfwSetWindowSizeCallback(window, &resize);
+    glfwSetScrollCallback(window, wheel);
+
+    glfwSetWindowSizeCallback(window, resize);
 
     resize(window, width, height);
   }
@@ -31,6 +33,13 @@ class Window {
 
   explicit operator bool() {
     glfwWaitEvents();
+
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_LEFT) != GLFW_RELEASE) {
+      double x, y;
+      glfwGetCursorPos(window, &x, &y);
+      location[0] = static_cast<GLfloat>(x) * 2.0f / size[0] - 1.0f;
+      location[1] = 1.0f - static_cast<GLfloat>(y) * 2.0f / size[1];    
+    }
 
     // return true if not need to close the window
     return !glfwWindowShouldClose(window);
@@ -53,14 +62,27 @@ class Window {
     }
   }
 
+  static void wheel(GLFWwindow* window, double x, double y) {
+    Window* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
+
+    if (instance) {
+      instance->scale += static_cast<GLfloat>(y);
+    }
+  }
+
   inline const GLfloat* getSize() const { return size; }
 
   inline GLfloat getScale() const { return scale; }
+
+  inline const GLfloat* getLocation() const { return location; }
 
  private:
   GLFWwindow* window;
   GLfloat size[2];
   GLfloat scale;
+
+  // figure position in normalized device coordinates
+  GLfloat location[2];
 };
 
 #endif // WINDOW_H
