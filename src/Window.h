@@ -42,7 +42,7 @@ class Window {
     }
 
     // return true if not need to close the window
-    return !glfwWindowShouldClose(window);
+    return !glfwWindowShouldClose(window) && !glfwGetKey(window, GLFW_KEY_ESCAPE);
   }
 
   inline void swapBuffers() const { glfwSwapBuffers(window); }
