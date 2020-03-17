@@ -11,3 +11,6 @@ Just learning OpenGL Basics.
 - 床井浩平『○○くんのために一所懸命書いたものの結局○○くんの卒業に間に合わなかったGLFW によるOpenGL入門』https://tokoik.github.io/GLFWdraft.pdf
 - Learning OpenGL https://learnopengl.com/
 - In One Week http://in1weekend.blogspot.com/
+
+## License
+MIT
