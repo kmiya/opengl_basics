@@ -6,13 +6,13 @@
 
 #include <vector>
 
-bool readShaderSource(const char* name, std::vector<GLchar>& buffer);
+bool readShaderSource(const char* const name, std::vector<GLchar>& buffer);
 
-GLuint loadProgramObject(const char* vert, const char* frag);
+GLuint loadProgramObject(const char* const vert, const char* const frag);
 
-GLuint createProgramObject(const char* vsrc, const char* fsrc);
+GLuint createProgramObject(const char* const vsrc, const char* const fsrc);
 
-GLboolean printShaderInfoLog(GLuint shader, const char* str);
+GLboolean printShaderInfoLog(GLuint shader, const char* const str);
 
 GLboolean printProgramInfoLog(GLuint program);
 

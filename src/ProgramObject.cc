@@ -4,7 +4,7 @@
 #include <iostream>
 #include <vector>
 
-bool readShaderSource(const char* name, std::vector<GLchar>& buffer) {
+bool readShaderSource(const char* const name, std::vector<GLchar>& buffer) {
   if (!name) {
     return false;
   }
@@ -34,7 +34,7 @@ bool readShaderSource(const char* name, std::vector<GLchar>& buffer) {
   return true;
 }
 
-GLuint loadProgramObject(const char* vert, const char* frag) {
+GLuint loadProgramObject(const char* const vert, const char* const frag) {
   std::vector<GLchar> vsrc;
   const bool vstat = readShaderSource(vert, vsrc);
   std::vector<GLchar> fsrc;
@@ -43,7 +43,7 @@ GLuint loadProgramObject(const char* vert, const char* frag) {
   return vstat && fstat ? createProgramObject(vsrc.data(), fsrc.data()) : 0;
 }
 
-GLuint createProgramObject(const char* vsrc, const char* fsrc) {
+GLuint createProgramObject(const char* const vsrc, const char* const fsrc) {
   const GLuint program = glCreateProgram();
 
   if (vsrc) {
@@ -77,7 +77,7 @@ GLuint createProgramObject(const char* vsrc, const char* fsrc) {
   return 0;
 }
 
-GLboolean printShaderInfoLog(GLuint shader, const char* str) {
+GLboolean printShaderInfoLog(GLuint shader, const char* const str) {
   GLint status;
   glGetShaderiv(shader, GL_COMPILE_STATUS, &status);
   if (!status) {

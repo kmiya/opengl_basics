@@ -8,7 +8,7 @@
 class Window {
  public:
   Window(const int width = 640, const int height = 480,
-         const char* title = "Main Window")
+         const char* const title = "Main Window")
       : window(glfwCreateWindow(width, height, title, nullptr, nullptr)),
         scale(100.0f), location{ 0.0f, 0.0f }, keyStatus(GLFW_RELEASE) {
     if (!window) {
@@ -59,13 +59,13 @@ class Window {
 
   inline void swapBuffers() const { glfwSwapBuffers(window); }
 
-  static void resize(GLFWwindow* window, int width, int height) {
+  static void resize(GLFWwindow* const window, const int width, const int height) {
     int fbWidth, fbHeight;
     glfwGetFramebufferSize(window, &fbWidth, &fbHeight);
 
     glViewport(0, 0, fbWidth, fbHeight);
 
-    Window* instance =
+    Window* const instance =
         static_cast<Window*>(glfwGetWindowUserPointer(window));
 
     if (instance) {
@@ -74,17 +74,17 @@ class Window {
     }
   }
 
-  static void wheel(GLFWwindow* window, const double x, const double y) {
-    Window* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
+  static void wheel(GLFWwindow* const window, const double x, const double y) {
+    Window* const instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
 
     if (instance) {
       instance->scale += static_cast<GLfloat>(y);
     }
   }
 
-  static void keyboard(GLFWwindow* window, const int key, const int scancode,
+  static void keyboard(GLFWwindow* const window, const int key, const int scancode,
     const int action, const int mods) {
-    Window* instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
+    Window* const instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
 
     if (instance) {
       instance->keyStatus = action;
@@ -98,7 +98,7 @@ class Window {
   inline const GLfloat* getLocation() const { return location; }
 
  private:
-  GLFWwindow* window;
+  GLFWwindow* const window;
   GLfloat size[2];
   GLfloat scale;
 
