@@ -22,13 +22,13 @@ class Matrix {
     matrix[0] = matrix[5] = matrix[10] = matrix[15] = 1.0f;
   }
 
-  static Matrix identity() const {
+  static Matrix identity() {
     Matrix t;
     t.loadIdentity();
     return t;
   }
 
-  static Matrix translate(const GLfloat x, const GLfloat y, const GLfloat z) const {
+  static Matrix translate(const GLfloat x, const GLfloat y, const GLfloat z) {
     Matrix t;
     t.loadIdentity();
     t[12] = x;
@@ -38,7 +38,7 @@ class Matrix {
     return t;
   }
 
-  static Matrix scale(const GLfloat x, const GLfloat y, const GLfloat z) const {
+  static Matrix scale(const GLfloat x, const GLfloat y, const GLfloat z) {
     Matrix t;
     t.loadIdentity();
     t[0] = x;
@@ -48,7 +48,7 @@ class Matrix {
     return t;
   }
 
-  static Matrix rotate(const GLfloat a, const GLfloat x, const GLfloat y, const GLfloat z) const {
+  static Matrix rotate(const GLfloat a, const GLfloat x, const GLfloat y, const GLfloat z) {
     Matrix t;
     const GLfloat d = sqrt(x * x + y * y + z * z);
     if (d > 0.0f) {
@@ -82,6 +82,7 @@ class Matrix {
         matrix[8 + j] * m[k + 2] +
         matrix[12 + j] * m[k + 3];
     }
+    return t;
   }
 
 private:
