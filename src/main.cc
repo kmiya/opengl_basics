@@ -29,10 +29,8 @@ int main() {
 
   const GLuint program = loadProgramObject("point.vert", "point.frag");
 
-  // get location of uniform variables
-  const GLint sizeLoc = glGetUniformLocation(program, "size");
-  const GLint scaleLoc = glGetUniformLocation(program, "scale");
-  const GLint locationLoc = glGetUniformLocation(program, "location");
+  // get location of uniform variable
+  const GLint modelLoc = glGetUniformLocation(program, "model");
 
   // create figure data
   std::unique_ptr<const Shape> shape(new Shape(2, 4, rectangleVertex));
@@ -44,10 +42,19 @@ int main() {
     // enable shader program
     glUseProgram(program);
 
-    // set values to uniform variables
-    glUniform2fv(sizeLoc, 1, window.getSize());
-    glUniform1f(scaleLoc, window.getScale());
-    glUniform2fv(locationLoc, 1, window.getLocation());
+    const GLfloat* const size = window.getSize();
+    const GLfloat scale = window.getScale() * 2.0f;
+    const Matrix scaling =
+        Matrix::scale(scale / size[0], scale / size[1], 1.0f);
+
+    const GLfloat* const position = window.getLocation();
+    const Matrix translation =
+        Matrix::translate(position[0], position[1], 0.0f);
+
+    // model transformation matrix
+    const Matrix model = translation * scaling;
+
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
 
     shape->draw();
 
