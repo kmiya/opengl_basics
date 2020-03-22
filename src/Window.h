@@ -78,7 +78,7 @@ class Window {
     Window* const instance = static_cast<Window*>(glfwGetWindowUserPointer(window));
 
     if (instance) {
-      instance->scale += static_cast<GLfloat>(y);
+      instance->scale += static_cast<GLfloat>(y * 3);
     }
   }
 
