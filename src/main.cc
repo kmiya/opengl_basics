@@ -30,7 +30,8 @@ int main() {
   const GLuint program = loadProgramObject("point.vert", "point.frag");
 
   // get location of uniform variable
-  const GLint modelLoc = glGetUniformLocation(program, "model");
+  const GLint modelviewLoc = glGetUniformLocation(program, "modelview");
+  const GLint projectionLoc = glGetUniformLocation(program, "projection");
 
   // create figure data
   std::unique_ptr<const Shape> shape(new Shape(2, 4, rectangleVertex));
@@ -44,17 +45,22 @@ int main() {
 
     const GLfloat* const size = window.getSize();
     const GLfloat scale = window.getScale() * 2.0f;
-    const Matrix scaling =
-        Matrix::scale(scale / size[0], scale / size[1], 1.0f);
-
-    const GLfloat* const position = window.getLocation();
-    const Matrix translation =
-        Matrix::translate(position[0], position[1], 0.0f);
+    const GLfloat w = size[0] / scale, h = size[1] / scale;
+    const Matrix projection(Matrix::orthogonal(-w, w, -h, h, 1.0f, 10.0f));
 
     // model transformation matrix
-    const Matrix model = translation * scaling;
+    const GLfloat* const location = window.getLocation();
+    const Matrix model(Matrix::translate(location[0], location[1], 0.0f));
 
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, model.data());
+    // view transformation matrix
+    const Matrix view =
+        Matrix::lookat(3.0f, 4.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
+
+    // modeview transformation matrix
+    const Matrix modelview(view * model);
+
+    glUniformMatrix4fv(modelviewLoc, 1, GL_FALSE, modelview.data());
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, projection.data());
 
     shape->draw();
 

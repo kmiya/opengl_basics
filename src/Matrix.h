@@ -72,6 +72,76 @@ class Matrix {
     return t;
   }
 
+  // create view transformation matrix
+  static Matrix lookat(
+      const GLfloat ex, const GLfloat ey, const GLfloat ez,    // eye position
+      const GLfloat gx, const GLfloat gy, const GLfloat gz,    // target position
+      const GLfloat ux, const GLfloat uy, const GLfloat uz) {  // upper vector
+    // eye to origin
+    const Matrix tv = translate(-ex, -ey, -ez);
+
+    // calc view axis (r, s, t)
+    // t = e - g
+    const GLfloat tx = ex - gx;
+    const GLfloat ty = ey - gy;
+    const GLfloat tz = ez - gz;
+    // r = u x t
+    const GLfloat rx = uy * tz - uz * ty;
+    const GLfloat ry = uz * tx - ux * tz;
+    const GLfloat rz = ux * ty - uy * tx;
+    // s = t x r
+    const GLfloat sx = ty * rz - tz * ry;
+    const GLfloat sy = tz * rx - tx * rz;
+    const GLfloat sz = tx * ry - ty * rx;
+
+    // check length of vector s
+    const GLfloat s2 = sx * sx + sy * sy + sz * sz;
+    if (s2 == 0.0f) return tv;
+
+    // transform matrix for rotation
+    Matrix rv;
+    rv.loadIdentity();
+
+    const GLfloat r = sqrt(rx * rx + ry * ry + rz * rz);
+    rv[0] = rx / r;
+    rv[4] = ry / r;
+    rv[8] = rz / r;
+
+    const GLfloat s = sqrt(s2);
+    rv[1] = sx / s;
+    rv[5] = sy / s;
+    rv[9] = sz / s;
+
+    const GLfloat t = sqrt(tx * tx + ty * ty + tz * tz);
+    rv[2] = tx / t;
+    rv[6] = ty / t;
+    rv[10] = tz / t;
+
+    return rv * tv;
+  }
+
+  static Matrix orthogonal(
+      const GLfloat left, const GLfloat right,
+      const GLfloat bottom, const GLfloat top,
+      const GLfloat zNear, const GLfloat zFar) {
+    Matrix t;
+    const GLfloat dx = right - left;
+    const GLfloat dy = top - bottom;
+    const GLfloat dz = zFar - zNear;
+
+    if (dx != 0.0f && dy != 0.0f && dz != 0.0f) {
+      t.loadIdentity();
+      t[0] = 2.0f / dx;
+      t[5] = 2.0f / dy;
+      t[10] = -2.0f / dz;
+      t[12] = -(right + left) / dx;
+      t[13] = -(top + bottom) / dy;
+      t[14] = -(zFar + zNear) / dz;
+    }
+
+    return t;
+  }
+
   Matrix operator*(const Matrix& m) const {
     Matrix t;
     for (int i = 0; i < 16; ++i) {
