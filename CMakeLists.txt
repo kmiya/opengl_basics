@@ -18,7 +18,8 @@ target_include_directories(glad PUBLIC ${GLAD_INCLUDES})
 set(SOURCE_FILES
     src/main.cc
     src/ProgramObject.cc
-    src/Window.cc)
+    src/Window.cc
+    src/Matrix.cc)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 target_link_libraries(${PROJECT_NAME} glad glfw3 glfw3dll opengl32)
