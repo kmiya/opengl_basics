@@ -120,10 +120,9 @@ class Matrix {
     return rv * tv;
   }
 
-  static Matrix orthogonal(
-      const GLfloat left, const GLfloat right,
-      const GLfloat bottom, const GLfloat top,
-      const GLfloat zNear, const GLfloat zFar) {
+  static Matrix orthogonal(const GLfloat left, const GLfloat right,
+                           const GLfloat bottom, const GLfloat top,
+                           const GLfloat zNear, const GLfloat zFar) {
     Matrix t;
     const GLfloat dx = right - left;
     const GLfloat dy = top - bottom;
@@ -141,6 +140,29 @@ class Matrix {
 
     return t;
   }
+
+  static Matrix frustum(const GLfloat left, const GLfloat right,
+                        const GLfloat bottom, const GLfloat top,
+                        const GLfloat zNear, const GLfloat zFar) {
+    Matrix t;
+    const GLfloat dx = right - left;
+    const GLfloat dy = top - bottom;
+    const GLfloat dz = zFar - zNear;
+
+    if (dx != 0.0f && dy != 0.0f && dz != 0.0f) {
+      t.loadIdentity();
+      t[0] = 2.0f * zNear / dx;
+      t[5] = 2.0f * zNear / dy;
+      t[8] = (right + left) / dx;
+      t[9] = (top + bottom) / dy;
+      t[10] = -(zFar + zNear) / dz;
+      t[11] = -1.0f;
+      t[14] = -2.0f * zFar * zNear / dz;
+      t[15] = 0.0f;
+    }
+    return t;
+  }
+
 
   Matrix operator*(const Matrix& m) const {
     Matrix t;
